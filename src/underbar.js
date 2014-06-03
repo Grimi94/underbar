@@ -285,6 +285,12 @@ var _ = {};
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    return function(arg) {
+      if (!func.hasOwnProperty(arg)) {
+        func[arg] = func(arg);
+      }
+      return func[arg];
+    };
   };
 
   // Delays a function for the given number of milliseconds, and then calls
