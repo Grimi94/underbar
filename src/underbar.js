@@ -39,7 +39,7 @@ var _ = {};
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
-    return n === undefined ? _.first(array.reverse()) :  _.first(array.reverse(), n).reverse();
+    return n === undefined ? _.first(array.reverse()) : _.first(array.reverse(), n).reverse();
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -174,10 +174,7 @@ var _ = {};
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
     return _.reduce(collection, function(wasFound, item) {
-      if (wasFound) {
-        return true;
-      }
-      return item === target;
+      return wasFound || item === target;
     }, false);
   };
 
@@ -187,12 +184,7 @@ var _ = {};
     iterator = iterator || _.identity;
     // TIP: Try re-using reduce() here.
     return !!_.reduce(collection, function(passed, item) {
-      if (!passed){
-        return false;
-      }else{
-        return iterator(item);
-      }
-
+      return !passed ? false : iterator(item);
     }, true);
   };
 
@@ -204,7 +196,6 @@ var _ = {};
     return !_.every(collection, function(item) {
       return !iterator(item);
     });
-
   };
 
 
@@ -227,8 +218,8 @@ var _ = {};
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
-    for(var i = 0;  i < arguments.length; i++){
-      for( var key in arguments[i]){
+    for (var i = 0;  i < arguments.length; i++) {
+      for (var key in arguments[i]) {
         obj[key] = arguments[i][key];
       }
     }
@@ -238,9 +229,9 @@ var _ = {};
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
-    for(var i = 0; i < arguments.length; i++){
-      for(var key in arguments[i]){
-        obj[key] = obj.hasOwnProperty(key)? obj[key] : arguments[i][key];
+    for (var i = 0; i < arguments.length; i++) {
+      for (var key in arguments[i]) {
+        obj[key] = obj.hasOwnProperty(key) ? obj[key] : arguments[i][key];
       }
     }
     return obj;
@@ -286,9 +277,7 @@ var _ = {};
   // instead if possible.
   _.memoize = function(func) {
     return function(arg) {
-      if (!func.hasOwnProperty(arg)) {
-        func[arg] = func(arg);
-      }
+      !func.hasOwnProperty(arg) && (func[arg] = func(arg));
       return func[arg];
     };
   };
@@ -342,22 +331,19 @@ var _ = {};
   _.sortBy = function(collection, iterator) {
     var obj = {};
 
-    if (typeof iterator === 'string') {
-
-      _.each(collection,function(item){
+    _.each(collection,function(item){
+      if (typeof iterator === 'string') {
         if (obj[item[iterator]] === undefined){
           obj[item[iterator]] = [];
         }
         obj[item[iterator]].push(item);
-      });
-    } else {
-      _.each(collection,function(item){
+      } else {
         if (obj[iterator(item)] === undefined){
           obj[iterator(item)] = [];
         }
         obj[iterator(item)].push(item);
-      });
-    }
+      }
+    });
 
     var results = [];
     _.each(Object.keys(obj).sort(),function(key){
