@@ -474,6 +474,27 @@ var _ = {};
   //
   // See the Underbar readme for details.
   _.throttle = function(func, wait) {
+    var first = true;
+    var lastReturned;
+    var lastCalled;
+
+    return function() {
+      var now = new Date().getTime();
+      if (first ||  (now - lastCalled) >= wait) {
+        first = false;
+        lastCalled = now;
+        lastReturned = func.apply(this, arguments);
+
+      } else {
+        // not allowed to call func
+        setTimeout(function() {
+          lastCalled = new Date().getTime();
+          lastReturned = func.apply(this, arguments);
+        }, wait);
+      }
+
+      return lastReturned;
+    };
   };
 
 }).call(this);
