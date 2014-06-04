@@ -419,6 +419,13 @@ var _ = {};
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
+    var arrayCount = arguments.length;
+    var intersected = _.flatten(_.map(arguments,function(array){
+      return _.uniq(array);
+    }));
+
+    var occurred = 0;
+
   };
 
   // Take the difference between one array and a number of other arrays.
