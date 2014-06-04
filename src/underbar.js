@@ -450,22 +450,12 @@ var _ = {};
     });
 
     return results;
-
-
-
-
-    /*
-    return _.filter(intersected, function(item) {
-      return _.every(arguments, function(array) {
-        return array.indexOf(item) !== -1;
-      });
-    });
-    */
   };
 
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
+
   };
 
 
