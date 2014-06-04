@@ -424,8 +424,43 @@ var _ = {};
       return _.uniq(array);
     }));
 
-    var occurred = 0;
+    var occurances = {};
 
+    var countOcurrances = function(array, element){
+      if (occurances[element] === undefined) {
+        var indices = [];
+        var index = array.indexOf(element);
+        while(index !== -1){
+          indices.push(index);
+          index = array.indexOf(element,index+1);
+        }
+        occurances[element] = indices.length;
+      }
+    };
+
+    _.each(intersected, function (item) {
+      countOcurrances(intersected, item);
+    });
+
+    var results = [];
+    _.each(occurances, function(val, key) {
+      if (val === arrayCount) {
+        results.push(key);
+      }
+    });
+
+    return results;
+
+
+
+
+    /*
+    return _.filter(intersected, function(item) {
+      return _.every(arguments, function(array) {
+        return array.indexOf(item) !== -1;
+      });
+    });
+    */
   };
 
   // Take the difference between one array and a number of other arrays.
